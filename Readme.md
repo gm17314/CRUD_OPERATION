@@ -1,6 +1,5 @@
 
 
-```javascript
 # CRUD Operations with Mongoose
 
 This repository contains examples of CRUD operations using Mongoose in a Node.js application.

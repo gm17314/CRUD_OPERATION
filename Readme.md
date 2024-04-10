@@ -1,5 +1,4 @@
-
-```markdown
+```javascript
 # CRUD Operations with Mongoose
 
 This repository contains examples of CRUD operations using Mongoose in a Node.js application.
@@ -12,9 +11,82 @@ This repository contains examples of CRUD operations using Mongoose in a Node.js
 - [Delete](#delete)
 - [Merge Collections](#merge-collections)
 
+## StudentModel
+
+```javascript
+const mongoose = require("mongoose");
+
+// Schema
+const StudentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  rollNumber: {
+    type: Number,
+    min: 1,
+  },
+  result: [
+    {
+      subject: {
+        type: String,
+        trim: true,
+        required: true,
+      },
+      marks: {
+        type: Number,
+        min: 1,
+      },
+    },
+  ],
+  club: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Club",
+    },
+  ],
+});
+
+// Model
+const StudentModel = mongoose.model("Student", StudentSchema);
+
+module.exports = StudentModel;
+```
+
+## ClubModel
+
+```javascript
+const mongoose = require("mongoose");
+
+const ClubSchema = new mongoose.Schema({
+    title:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    description:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    student: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Student",
+        },
+    ],
+});
+
+const ClubModel = mongoose.model("Club", ClubSchema);
+
+module.exports = ClubModel;
+```
+
 ## Create
 
 ### Create type 1
+
 ```javascript
 const s1 = new StudentModel({
     name: "Gaurav Maurya",
@@ -32,6 +104,7 @@ s1.save()
 ```
 
 ### Create type 2
+
 ```javascript
 const data = {
     name: "Ayush Verma",
@@ -47,6 +120,7 @@ StudentModel.create(data)
 ```
 
 ### Create type 3
+
 ```javascript
 const data1 = [
     {
@@ -71,6 +145,7 @@ StudentModel.insertMany(data1)
 ## Read
 
 ### Read type 1
+
 ```javascript
 StudentModel.find()
     .then((data) => {
@@ -82,6 +157,7 @@ StudentModel.find()
 ```
 
 ### Read type 2
+
 ```javascript
 StudentModel.findOne()
     .then((data) => {
@@ -93,6 +169,7 @@ StudentModel.findOne()
 ```
 
 ### Read type 3
+
 ```javascript
 StudentModel.findById("660add157c2046eef120b5a8")
     .then((data) => {
@@ -106,6 +183,7 @@ StudentModel.findById("660add157c2046eef120b5a8")
 ## Update
 
 ### Update type 1
+
 ```javascript
 StudentModel.updateOne({ name: "Raghvi Tiwari" }, { name: "Raghavi Tiwari" })
     .then((data) => {
@@ -117,6 +195,7 @@ StudentModel.updateOne({ name: "Raghvi Tiwari" }, { name: "Raghavi Tiwari" })
 ```
 
 ### Update type 2
+
 ```javascript
 StudentModel.updateMany({ "result.subject": "Python" }, { $set: { "result.$.subject": "Python3.8" } })
     .then((data) => {
@@ -128,6 +207,7 @@ StudentModel.updateMany({ "result.subject": "Python" }, { $set: { "result.$.subj
 ```
 
 ### Update type 3
+
 ```javascript
 StudentModel.findOneAndUpdate({ rollNumber: 20013315300119 }, { name: "Nishtha Chaudhary Verma" })
     .then((data) => {
@@ -139,6 +219,7 @@ StudentModel.findOneAndUpdate({ rollNumber: 20013315300119 }, { name: "Nishtha C
 ```
 
 ### Update type 4
+
 ```javascript
 StudentModel.findByIdAndUpdate("660ae10019d2ea2336a0ad78", { name: "Maurya Nishtha Chaudhary Verma" })
     .then((data) => {
@@ -152,6 +233,7 @@ StudentModel.findByIdAndUpdate("660ae10019d2ea2336a0ad78", { name: "Maurya Nisht
 ## Delete
 
 ### Delete type 1
+
 ```javascript
 StudentModel.deleteOne({ name: "Bhonu" })
     .then((data) => {
@@ -163,6 +245,7 @@ StudentModel.deleteOne({ name: "Bhonu" })
 ```
 
 ### Delete type 2
+
 ```javascript
 StudentModel.deleteMany({ name: "Nishtha Chaudhary" })
     .then((data) => {
@@ -174,6 +257,7 @@ StudentModel.deleteMany({ name: "Nishtha Chaudhary" })
 ```
 
 ### Delete type 3
+
 ```javascript
 StudentModel.findOneAndDelete({ name: "Jayesha Malhotra" })
     .then((data) => {
@@ -185,6 +269,7 @@ StudentModel.findOneAndDelete({ name: "Jayesha Malhotra" })
 ```
 
 ### Delete type 4
+
 ```javascript
 StudentModel.findByIdAndDelete("660adf74dce791a9ebd015a7")
     .then((data) => {
@@ -213,7 +298,9 @@ ClubModel.insertMany(data)
     .catch((err) => console.log(err));
 
 async function addClub(clubName, studentName) {
-    const club = await ClubModel.findOne({ title: clubName });
+    const club
+
+ = await ClubModel.findOne({ title: clubName });
     const student = await StudentModel.findOne({ name: studentName });
     if (club && student) {
         student.club.push(club);
@@ -242,5 +329,5 @@ StudentModel.findOne({ name: "Gaurav Maurya" })
     })
     .catch((err) => console.log(err));
 ```
-
 ```
+
